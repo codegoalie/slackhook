@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"net"
 	"net/http"
+	"time"
 )
 
 // Message to send to Slack's Incoming WebHook API.
@@ -21,7 +23,7 @@ type Message struct {
 	Attachments []*Attachment `json:"attachments,omitempty"`
 }
 
-// Attachments provide rich-formatting to messages
+// Attachment provides rich-formatting to messages
 //
 // See https://api.slack.com/docs/attachments
 type Attachment struct {
@@ -41,13 +43,16 @@ type Attachment struct {
 	Timestamp  int     `json:"ts,omitempty"` // Unix timestamp
 }
 
+// Field is displayed in a table inside the message attachment
+//
+// See https://api.slack.com/docs/message-attachments#fields
 type Field struct {
 	Title string `json:"title,omitempty"`
 	Value string `json:"value,omitempty"`
 	Short bool   `json:"short,omitempty"`
 }
 
-// Add attachments to a Slack Message
+// AddAttachment adds attachments to a Slack Message
 func (m *Message) AddAttachment(a *Attachment) {
 	m.Attachments = append(m.Attachments, a)
 }
@@ -84,10 +89,11 @@ func (c *Client) Send(msg *Message) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
 
 	// Discard response body to reuse connection
-	io.Copy(ioutil.Discard, resp.Body)
+	_, _ = io.Copy(ioutil.Discard, resp.Body)
+
+	_ = resp.Body.Close()
 
 	if resp.StatusCode != 200 {
 		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
