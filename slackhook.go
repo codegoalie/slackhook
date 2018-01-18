@@ -63,6 +63,11 @@ type Poster interface {
 	Post(url, contentType string, body io.Reader) (*http.Response, error)
 }
 
+// ClientOptions specifies options when creating a new Client
+type ClientOptions struct {
+	HTTPClient Poster
+}
+
 // Client for Slack's Incoming WebHook API.
 type Client struct {
 	url        string
@@ -70,8 +75,23 @@ type Client struct {
 }
 
 // New Slack Incoming WebHook Client using http.DefaultClient for its Poster.
-func New(url string) *Client {
-	return &Client{url: url, HTTPClient: http.DefaultClient}
+func New(url string, opts ClientOptions) *Client {
+	client := &Client{url: url}
+
+	if opts.HTTPClient != nil {
+		client.HTTPClient = opts.HTTPClient
+	} else {
+		client.HTTPClient = &http.Client{
+			Timeout: time.Second * 10,
+			Transport: &http.Transport{
+				Dial: (&net.Dialer{
+					Timeout: time.Second * 5,
+				}).Dial,
+				TLSHandshakeTimeout: time.Second * 5,
+			},
+		}
+	}
+	return client
 }
 
 // Simple text message.
