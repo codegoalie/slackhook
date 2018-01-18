@@ -11,7 +11,7 @@ WebHooks](https://api.slack.com/incoming-webhooks) API.
 ```go
 import "github.com/videofruit/slackhook"
 
-slackHook := slackhook.New(webhookURL, slackhook.Clientoptions{})
+slackHook := slackhook.New(webhookURL, slackhook.ClientOptions{})
 
 slackHook.Simple("Hello from slackhook!")
 ```
