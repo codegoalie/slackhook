@@ -27,20 +27,21 @@ type Message struct {
 //
 // See https://api.slack.com/docs/attachments
 type Attachment struct {
-	Fallback   string  `json:"fallback,omitempty"` // plain text summary
-	Color      string  `json:"color,omitempty"`    // {good|warning|danger|hex}
-	AuthorName string  `json:"author_name,omitempty"`
-	AuthorLink string  `json:"author_link,omitempty"`
-	AuthorIcon string  `json:"author_icon,omitempty"`
-	Title      string  `json:"title,omitempty"` // larger, bold text at top of attachment
-	TitleLink  string  `json:"title_link,omitempty"`
-	Text       string  `json:"text,omitempty"`
-	Fields     []Field `json:"fields,omitempty"`
-	ImageURL   string  `json:"image_url,omitempty"`
-	ThumbURL   string  `json:"thumb_url,omitempty"`
-	FooterIcon string  `json:"footer,omitempty"`
-	Footer     string  `json:"footer_icon,omitempty"`
-	Timestamp  int     `json:"ts,omitempty"` // Unix timestamp
+	Fallback   string   `json:"fallback,omitempty"` // plain text summary
+	Color      string   `json:"color,omitempty"`    // {good|warning|danger|hex}
+	AuthorName string   `json:"author_name,omitempty"`
+	AuthorLink string   `json:"author_link,omitempty"`
+	AuthorIcon string   `json:"author_icon,omitempty"`
+	Title      string   `json:"title,omitempty"` // larger, bold text at top of attachment
+	TitleLink  string   `json:"title_link,omitempty"`
+	Text       string   `json:"text,omitempty"`
+	Fields     []Field  `json:"fields,omitempty"`
+	Actions    []Action `json:"actions,omitempty"`
+	ImageURL   string   `json:"image_url,omitempty"`
+	ThumbURL   string   `json:"thumb_url,omitempty"`
+	FooterIcon string   `json:"footer,omitempty"`
+	Footer     string   `json:"footer_icon,omitempty"`
+	Timestamp  int      `json:"ts,omitempty"` // Unix timestamp
 }
 
 // Field is displayed in a table inside the message attachment
@@ -50,6 +51,16 @@ type Field struct {
 	Title string `json:"title,omitempty"`
 	Value string `json:"value,omitempty"`
 	Short bool   `json:"short,omitempty"`
+}
+
+// Action is a link styled as a button
+//
+// See https://api.slack.com/docs/message-attachments#attaching_buttons_to_messages
+type Action struct {
+	Type  string `json:"type,omitempty"`
+	Text  string `json:"text,omitempty"`
+	URL   string `json:"url,omitempty"`
+	Style string `json:"style,omitempty"`
 }
 
 // AddAttachment adds attachments to a Slack Message
