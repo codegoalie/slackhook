@@ -72,6 +72,6 @@ func TestAttachment(t *testing.T) {
 	}
 
 	if m.Attachments[0].Color != "danger" {
-		t.Errorf("Expected attachment to have color 'danger' but found '%d'", m.Attachments[0].Color)
+		t.Errorf("Expected attachment to have color 'danger' but found '%s'", m.Attachments[0].Color)
 	}
 }
