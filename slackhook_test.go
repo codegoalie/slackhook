@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"testing"
 
-	. "github.com/lytics/slackhook"
+	. "github.com/codegoalie/slackhook"
 )
 
 type fakeposter struct {
